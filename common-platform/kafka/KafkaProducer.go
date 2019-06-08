@@ -9,7 +9,7 @@ import (
 
 //This send message is blocking api and need to be updated with timeout
 //In case of failure return error otherwise nil
-func SendMessage(topicName string, msg []byte) error {
+func SendMessage(topicName string, key string, msg []byte) error {
 	//create a producer instance
 	//Most important property is kafka server address
 	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092", "acks": -1})
@@ -29,6 +29,7 @@ func SendMessage(topicName string, msg []byte) error {
 	//send a message
 	err = p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topicName},
+		Key:            []byte(key),
 		Value:          msg,
 	}, deliveryChan)
 
@@ -47,6 +48,5 @@ func SendMessage(topicName string, msg []byte) error {
 		close(deliveryChan)
 	}(deliveryChan)
 
-	close(deliveryChan)
 	return m.TopicPartition.Error
 }

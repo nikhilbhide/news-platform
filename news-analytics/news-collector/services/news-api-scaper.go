@@ -30,21 +30,27 @@ type Newsheadlines struct {
 func main() {
 	fmt.Println("Starting the application...")
 
-	url := "https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey="
-	response, err := http.Get(url)
+	countries := []string{"us", "in", "gb"}
+	url := "https://newsapi.org/v2/top-headlines?country=%s&apiKey=456f513b38d14b4a8c96fd267274c62d"
 
-	if err != nil {
-		fmt.Printf("The HTTP request failed with error %s\n", err)
-	} else {
-		data, _ := ioutil.ReadAll(response.Body)
-		//fmt.Println(string(data))
-		res := Newsheadlines{}
+	for _, country := range countries {
+		countryUrl := fmt.Sprintf(url, country)
 
-		if err := json.Unmarshal(data, &res); err != nil {
-			panic(err)
+		response, err := http.Get(countryUrl)
+
+		if err != nil {
+			fmt.Printf("The HTTP request failed with error %s\n", err)
+		} else {
+			data, _ := ioutil.ReadAll(response.Body)
+			fmt.Println(string(data))
+			res := Newsheadlines{}
+
+			if err := json.Unmarshal(data, &res); err != nil {
+				panic(err)
+			}
+
+			//send data to the topic
+			kafka.SendMessage("article-scraper", url, data)
 		}
-
-		//send data to the topic
-		kafka.SendMessage("article-scraper", url, data)
 	}
 }

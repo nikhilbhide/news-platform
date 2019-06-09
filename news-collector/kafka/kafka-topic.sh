@@ -1,0 +1,1 @@
+./bin/kafka-topics.sh --create --topic news_articles_scraper --zookeeper localhost:2181 --partitions 10 --replication-factor=1

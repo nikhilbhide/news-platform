@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ type Newsheadlines struct {
 	} `json:"articles"`
 }
 
-func main() {
+func ScrapeNewsHeadlines() {
 	fmt.Println("Starting the application...")
 
 	countries := []string{"us", "in", "gb"}

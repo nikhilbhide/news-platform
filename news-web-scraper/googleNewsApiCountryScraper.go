@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"github.com/PuerkitoBio/goquery"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+// This will get called for each HTML element found
+func processElement(index int, element *goquery.Selection) {
+	// See if the href attribute exists on the element
+	href, exists := element.Attr("href")
+	if exists {
+		fmt.Println(href)
+	}
+}
+
+func main() {
+	// Make HTTP GET request
+	response, err := http.Get("https://newsapi.org/sources")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+
+	/*// Create a goquery document from the HTTP response
+	document, err := goquery.NewDocumentFromReader(response.Body)
+	if err != nil {
+		log.Fatal("Error loading HTTP response body. ", err)
+	}
+
+	// Find all links and process them with the function
+	// defined earlier
+	document.Find("countries-and-categories").Each(processElement)*/
+
+	// Read response data in to memory
+	body, err := ioutil.ReadAll(response.Body)
+	//document.Find("countries-and-categories").Each(processElement)
+	fmt.Println(string(body))
+
+}

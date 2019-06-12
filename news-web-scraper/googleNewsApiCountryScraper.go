@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io"
 	"log"
@@ -9,9 +8,11 @@ import (
 	"os"
 )
 
+//a set of countries scraped from web page
 var countrySet map[string]bool
 var countires []string
 
+//return a slice of countries
 func GetCountries() []string {
 	return countires
 }
@@ -33,6 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading HTTP response body. ", err)
 	}
+
 	// Make request
 	if err != nil {
 		log.Fatal(err)
@@ -44,9 +46,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Println(response)
+
 	// Find all links and process them with the function
-	// defined earlier
 	getCountries := func(index int, element *goquery.Selection) {
 		// See if the href attribute exists on the element
 		country, exists := element.Attr("data-country")
@@ -55,14 +56,11 @@ func main() {
 		}
 	}
 
+	//extract the countries from web page
 	document.Find("div").Each(getCountries)
-	fmt.Println(countrySet)
 
+	//iterate over map and retrieve countires
 	for key, _ := range countrySet {
 		countires = append(countires, key)
-	}
-
-	for _, value := range GetCountries() {
-		fmt.Println(value)
 	}
 }

@@ -1,10 +1,11 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/nik/news-platform/common-platform/cassandra"
 	"github.com/nik/news-platform/common-platform/kafka"
 	"time"
-	"encoding/json"
 )
 
 type Newsheadlines struct {
@@ -33,15 +34,22 @@ func ListenAndProcessArticles() {
 	for {
 		msg, _ := consumer.ReadMessage(-1)
 
-		if(msg!=nil) {
+		if msg != nil {
 			//transform the message into articles
 			res := Newsheadlines{}
 			if err := json.Unmarshal(msg.Value, &res); err != nil {
 				panic(err)
 			}
-
+			session := cassandra.ConnectToCluster()
+			defer cassandra.CloseSession(session)
 			for _, article := range res.Articles {
-				fmt.Println(article)
+				if err := session.Query(`
+      					INSERT INTO users (country, author, content, date, description, url, published_at) VALUES (?, ?, ?,?, ?, ?, ?)`,
+					"us", article.Author, article.Content, article.PublishedAt, article.Description, article.URL, article.PublishedAt).Exec(); err != nil {
+					fmt.Println(err)
+				} else {
+
+				}
 			}
 		}
 	}

@@ -36,8 +36,8 @@ func ScrapeNewsHeadlines() {
 	for _, country := range countries {
 		countryUrl := fmt.Sprintf(url, country)
 
+		//get response by countries
 		response, err := http.Get(countryUrl)
-
 		if err != nil {
 			fmt.Printf("The HTTP request failed with error %s\n", err)
 		} else {
@@ -45,6 +45,8 @@ func ScrapeNewsHeadlines() {
 			fmt.Println(string(data))
 			res := Newsheadlines{}
 
+			//convert the data into json?
+			//Is it required? We will revisit and address the issue
 			if err := json.Unmarshal(data, &res); err != nil {
 				panic(err)
 			}

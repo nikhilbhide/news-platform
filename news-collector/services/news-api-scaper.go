@@ -27,17 +27,24 @@ type Newsheadlines struct {
 	} `json:"articles"`
 }
 
+var newsAPIUrl string
+var apiKey string
+
+func Init(url string, apiKey string) {
+	newsAPIUrl = url
+	apiKey = apiKey
+}
+
 func ScrapeNewsHeadlines() {
 	fmt.Println("Starting the application...")
 
 	countries := []string{"us", "in", "gb"}
-	url := "https://newsapi.org/v2/top-headlines?country=%s&apiKey=456f513b38d14b4a8c96fd267274c62d"
 
 	for _, country := range countries {
-		countryUrl := fmt.Sprintf(url, country)
+		newsAPIUrl := fmt.Sprintf(newsAPIUrl, country, apiKey)
 
 		//get response by countries
-		response, err := http.Get(countryUrl)
+		response, err := http.Get(newsAPIUrl)
 		if err != nil {
 			fmt.Printf("The HTTP request failed with error %s\n", err)
 		} else {
@@ -52,7 +59,7 @@ func ScrapeNewsHeadlines() {
 			}
 
 			//send data to the topic
-			kafka.SendMessage("article-scraper", url, data)
+			kafka.SendMessage("article-scraper", country, data)
 		}
 	}
 }

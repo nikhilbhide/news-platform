@@ -11,6 +11,8 @@
 
 "KafkaBrokers":  "localhost:9092",
 
+"Topic": "article-scraper",
+
 "Version": {
 
 "SolutionName":  "News Collector",
@@ -18,6 +20,8 @@
 "ServiceName":    "News Collector Microservice",
 
 "ServiceProvider": "org.github.nik",
+
+"ListerURL": 11021,
 
 "Number": "0.1"
 }

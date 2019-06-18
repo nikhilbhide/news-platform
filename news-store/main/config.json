@@ -1,0 +1,24 @@
+{
+  "Cassandra": {
+    "Host": "localhost:9042",
+    "Keyspace": "article_db"
+  },
+
+  "GoogleNewsAPI": {
+    "Url":"https://newsapi.org/v2/top-headlines?country=%s&apiKey=%s",
+    "APIKey": "456f513b38d14b4a8c96fd267274c62d"
+  },
+
+  "KafkaBrokers":  "localhost:9092",
+
+  "Version": {
+
+    "SolutionName":  "News Collector",
+
+    "ServiceName":    "News Collector Microservice",
+
+    "ServiceProvider": "org.github.nik",
+
+    "Number": "0.1"
+  }
+}

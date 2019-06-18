@@ -4,44 +4,27 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nik/news-platform/common-platform/kafka"
+	"github.com/nik/news-platform/news-collector/model"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
-type Newsheadlines struct {
-	Status       string `json:"status"`
-	TotalResults int    `json:"totalResults"`
-	Articles     []struct {
-		Source struct {
-			ID   string `json:"id"`
-			Name string `json:"name"`
-		} `json:"source"`
-		Author      string    `json:"author"`
-		Title       string    `json:"title"`
-		Description string    `json:"description"`
-		URL         string    `json:"url"`
-		URLToImage  string    `json:"urlToImage"`
-		PublishedAt time.Time `json:"publishedAt"`
-		Content     string    `json:"content"`
-	} `json:"articles"`
-}
-
-var newsAPIUrl string
-var apiKey string
+var NewsAPIUrl string
+var ApiKey string
 
 func Init(url string, apiKey string) {
-	newsAPIUrl = url
-	apiKey = apiKey
+	NewsAPIUrl = url
+	ApiKey = apiKey
 }
 
-func ScrapeNewsHeadlines() {
+//scrapes news headlines
+func ScrapeNewsHeadlines(config model.Config) {
 	fmt.Println("Starting the application...")
 
 	countries := []string{"us", "in", "gb"}
 
 	for _, country := range countries {
-		newsAPIUrl := fmt.Sprintf(newsAPIUrl, country, apiKey)
+		newsAPIUrl := fmt.Sprintf(NewsAPIUrl, country, ApiKey)
 
 		//get response by countries
 		response, err := http.Get(newsAPIUrl)
@@ -50,7 +33,7 @@ func ScrapeNewsHeadlines() {
 		} else {
 			data, _ := ioutil.ReadAll(response.Body)
 			fmt.Println(string(data))
-			res := Newsheadlines{}
+			res := model.Newsheadlines{}
 
 			//convert the data into json?
 			//Is it required? We will revisit and address the issue
@@ -59,7 +42,7 @@ func ScrapeNewsHeadlines() {
 			}
 
 			//send data to the topic
-			kafka.SendMessage("article-scraper", country, data)
+			kafka.SendMessage(config.Topic, country, data)
 		}
 	}
 }

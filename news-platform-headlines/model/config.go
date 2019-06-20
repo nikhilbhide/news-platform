@@ -7,7 +7,7 @@ type Config struct {
 		Keyspace string `json:Keyspace'`
 	} `json:"Cassandra"`
 	KafkaBrokers string  `json:"Host"`
-	Port         string  `json:"Port"`
+	ListernURL   string  `json:"ListernURL"`
 	Version      Version `json:"Version"`
 }
 

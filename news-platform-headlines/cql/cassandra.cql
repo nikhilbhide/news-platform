@@ -15,3 +15,6 @@ create table news_headlines
 	Primary key (country,date,url)
 )
 with comment = 'table to hold the headlines data';
+
+#select headlines where country = ?
+select * from news_headlines where country = ?;

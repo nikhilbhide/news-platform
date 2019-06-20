@@ -11,6 +11,8 @@
 
   "KafkaBrokers":  "localhost:9092",
 
+  "ListernURL": "localhost:8082",
+
   "Version": {
 
     "SolutionName":  "News Collector",

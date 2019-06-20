@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/nik/news-platform/common-platform/cassandra"
 	"github.com/nik/news-platform/common-platform/kafka"
-	"github.com/nik/news-platform/news-store/model"
-	"github.com/nik/news-platform/news-store/repository"
+	"github.com/nik/news-platform/news-platform-headlines/model"
+	"github.com/nik/news-platform/news-platform-headlines/repository"
 	"time"
 )
 

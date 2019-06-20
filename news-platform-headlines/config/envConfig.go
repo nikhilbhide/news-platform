@@ -1,7 +1,7 @@
-package main
+package config
 
 import (
-	"github.com/nik/news-platform/news-store/model"
+	"github.com/nik/news-platform/news-platform-headlines/model"
 	"os"
 )
 import "fmt"

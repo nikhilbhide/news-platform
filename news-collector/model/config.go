@@ -7,7 +7,7 @@ type Config struct {
 	Topic         string        `json:"Topic"`
 	Version       Version       `json:"Version"`
 	GoogleNewsAPI GoogleNewsAPI `json:"GoogleNewsAPI"`
-	ListernPort   string        `json:"ListernURL"`
+	ListernURL    string        `json:"ListernURL"`
 }
 
 //google news api configuration

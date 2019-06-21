@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/nik/news-platform/common-platform/cassandra"
 	"github.com/nik/news-platform/news-platform-headlines/repository"
@@ -22,5 +23,6 @@ func GetTodaysHeadlines(w http.ResponseWriter, r *http.Request) {
 	date := time.Now()
 	//Format MM-DD-YYYY
 	fmt.Println(date.Format("01-02-2006"))
-	repository.GetHeadlinesByCountry(session, country)
+	headlines := repository.GetHeadlinesByCountry(session, country)
+	json.NewEncoder(w).Encode(headlines)
 }

@@ -19,3 +19,10 @@ type Newsheadlines struct {
 		Content     string    `json:"content"`
 	} `json:"articles"`
 }
+
+type NewsheadlinesResponse struct {
+	County       string    `json:"County"`
+	Content      string    `json:"Content"`
+	Published_At time.Time `json:"publishedAt"`
+	Author       string    `json:"Author"`
+}

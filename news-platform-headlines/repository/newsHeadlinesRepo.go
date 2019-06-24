@@ -1,22 +1,23 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/gocql/gocql"
 	"github.com/nik/news-platform/news-platform-headlines/model"
 	"time"
 )
 
 const headlinesTable = "news_headlines"
-const insertQuery = "INSERT INTO news_headlines (country, author, content, date, description, url, published_at,title, source_id, source_name) VALUES (?, ?, ?,?, ?, ?, ?,?,?,?)"
+const insertQuery = "INSERT INTO news_headlines (country, author, content, date, description, url, published_at,title, source_id, source_name) VALUES (?, ?, ?,?, ?, ?, ?,?,?,?) IF NOT EXISTS"
 const selectQuery = "SELECT country,content,author,published_at from news_headlines where country = ?"
 
 //method to insert the records into the table
 func Insert(session *gocql.Session, country string, input model.Newsheadlines) {
 	for _, article := range input.Articles {
-		if err := session.Query(insertQuery,
-			country, article.Author, article.Content, article.PublishedAt.Format("01-02-2006"), article.Description, article.URL, article.PublishedAt, article.Title, article.Source.ID, article.Source.Name).Exec(); err != nil {
-			panic(err)
-		}
+		published_date := article.PublishedAt.Format("01-02-2006")
+		applied, _ := session.Query(insertQuery,
+			country, article.Author, article.Content, article.PublishedAt.Format("01-02-2006"), article.Description, article.URL, article.PublishedAt, article.Title, article.Source.ID, article.Source.Name).ScanCAS(&country, &article.Author, &article.Content, &published_date, &article.Description, &article.URL, &article.PublishedAt, &article.Title, &article.Source.ID, &article.Source.Name)
+		fmt.Println(applied)
 	}
 }
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/justinas/alice"
+	"github.com/nik/news-platform/news-platform-headlines/common/infra/logs"
 	"github.com/nik/news-platform/news-platform-headlines/config"
 	"github.com/nik/news-platform/news-platform-headlines/interceptor"
 	"github.com/nik/news-platform/news-platform-headlines/router"
@@ -11,17 +11,27 @@ import (
 )
 
 func main() {
+	//set the logger to use advanced logging
+	logger := logs.InitLogger()
+	logger.Info("Bootstrapping the application")
+
+	//create a kafka consumer
 	go services.ListenAndProcessArticles()
+
+	logger.Info("Kafka consumer started")
 
 	//load the configuration
 	config := config.LoadConfiguration("news-platform-headlines/config/config.json")
+	logger.Info("Configuration is loaded")
 
-	// setting up web server middlewares
+	//setting up web server middlewares
 	middlewareManager := alice.New(
 		transactionId.AddIDRequestMiddleware).
 		Then(router.CreateRouter())
 
+	logger.Info("http handlers are initialized")
+
 	//start listening
-	err := http.ListenAndServe(config.ListernURL, middlewareManager)
-	fmt.Println("Stopping the application : %v", err)
+	error := http.ListenAndServe(config.ListernURL, middlewareManager)
+	logger.Infof("Stopping the application %v", error)
 }

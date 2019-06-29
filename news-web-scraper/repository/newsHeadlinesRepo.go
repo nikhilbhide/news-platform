@@ -8,7 +8,7 @@ import (
 )
 
 const headlinesTable = "news_headlines"
-const insertQuery = "INSERT INTO news_headlines_web_country_metadata (country, shortname) VALUES (?, ?,) IF NOT EXISTS"
+const insertQuery = "INSERT INTO news_headlines_web_country_metadata (country, shortname) VALUES (?, ?)"
 
 //method to insert the records into the table
 func InsertGoogleNewsHeadlinesMetadata(response []model.GoogleNewslinesMetadata) {
@@ -19,7 +19,7 @@ func InsertGoogleNewsHeadlinesMetadata(response []model.GoogleNewslinesMetadata)
 	//create a batch
 	batch := gocql.NewBatch(gocql.LoggedBatch)
 	for counter := 0; counter < len(response); counter++ {
-		batch.Query(insertQuery, counter, response[counter].Country, response[counter].Shortname)
+		batch.Query(insertQuery, response[counter].Country, response[counter].Shortname)
 	}
 
 	//execute a batch of cassandra

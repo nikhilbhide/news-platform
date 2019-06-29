@@ -1,7 +1,9 @@
-package main
+package scraper
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"github.com/nik/news-platform/news-web-scraper/model"
+	"github.com/nik/news-platform/news-web-scraper/repository"
 	"io"
 	"log"
 	"net/http"
@@ -9,13 +11,14 @@ import (
 )
 
 func ScrapeAndStoreMetaData() {
-
+	countryMetadataCollection := scrapeWebsite()
+	storeMetaData(countryMetadataCollection)
 }
 
 //scrapes the google website and extracts the country specific metadata
 //the country metadata is stored in the map of country name and short name
-func scrapeWebsite() {
-	var countryMetadata map[string]string
+func scrapeWebsite() []model.GoogleNewslinesMetadata {
+	var countryMetadata []model.GoogleNewslinesMetadata
 
 	// Make HTTP request
 	response, err := http.Get("https://newsapi.org/sources")
@@ -51,17 +54,30 @@ func scrapeWebsite() {
 			country, exists = element.Attr("title")
 		})
 
+		//extract country short name
 		countryShortName = element.Find("kbd").Text()
 
 		if exists {
-			countryMetadata[country] = countryShortName
+			//if shortname is retrieved from the current selection
+			metaDataInstance := model.GoogleNewslinesMetadata{
+				Country:   country,
+				Shortname: countryShortName,
+			}
+
+			//add google news headlines instance to the collection
+			countryMetadata = append(countryMetadata, metaDataInstance)
 		}
 	}
 
 	//extract the countries from web page
 	document.Find(".countries-and-categories .sources-container .source").Each(getCountries)
+
+	return countryMetadata
 }
 
-func storeMetaData(map[string]string) {
-
+//stores the data into cassandra
+func storeMetaData(inputMetadataCollection []model.GoogleNewslinesMetadata) {
+	if inputMetadataCollection != nil && len(inputMetadataCollection) > 0 {
+		repository.InsertGoogleNewsHeadlinesMetadata(inputMetadataCollection)
+	}
 }

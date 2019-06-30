@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-func InitLogger() *zap.SugaredLogger {
+func InitLogger(logPath string) *zap.SugaredLogger {
 	w := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   "/media/nik/7ec12544-2887-498c-85e9-bb82dfe7ffcc/nik/Setups/news-platform/news.log",
+		Filename:   logPath,
 		MaxSize:    500, // megabytes
 		MaxBackups: 3,
 		MaxAge:     28, // days

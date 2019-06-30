@@ -29,3 +29,7 @@ type Version struct {
 	ServiceProvider string `json:"ServiceProvider" envconfig:"NC_SERVICE_PROVIDER"`
 	Number          string `json:"Number" envconfig:"NC_NUMBER"`
 }
+
+type Logger struct {
+	LogPath string `json:"LogPath"`
+}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/justinas/alice"
-	"github.com/nik/news-platform/news-platform-headlines/common/infra/logs"
+	"github.com/nik/news-platform/common-platform/logger"
 	"github.com/nik/news-platform/news-platform-headlines/config"
 	"github.com/nik/news-platform/news-platform-headlines/interceptor"
 	"github.com/nik/news-platform/news-platform-headlines/router"
@@ -11,8 +11,11 @@ import (
 )
 
 func main() {
+	//load the configuration
+	config := config.LoadConfiguration("news-platform-headlines/config/config.json")
+
 	//set the logger to use advanced logging
-	logger := logs.InitLogger()
+	logger := logs.InitLogger(config.Logger.LogPath)
 	logger.Info("Bootstrapping the application")
 
 	//create a kafka consumer
@@ -20,8 +23,6 @@ func main() {
 
 	logger.Info("Kafka consumer started")
 
-	//load the configuration
-	config := config.LoadConfiguration("news-platform-headlines/config/config.json")
 	logger.Info("Configuration is loaded")
 
 	//setting up web server middlewares

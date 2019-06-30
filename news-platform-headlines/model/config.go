@@ -9,6 +9,11 @@ type Config struct {
 	KafkaBrokers string  `json:"Host"`
 	ListernURL   string  `json:"ListernURL"`
 	Version      Version `json:"Version"`
+	Logger       Logger  `json:"Logger"`
+}
+
+type Logger struct {
+	LogPath string `json:"LogPath"`
 }
 
 type Version struct {

@@ -2,30 +2,32 @@ package scraper
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"github.com/nik/news-platform/common-platform/logger"
 	"github.com/nik/news-platform/news-web-scraper/model"
 	"github.com/nik/news-platform/news-web-scraper/repository"
 	"io"
-	"log"
 	"net/http"
 	"os"
 )
 
-func ScrapeAndStoreMetaData() {
-	countryMetadataCollection := scrapeWebsite()
+func ScrapeAndStoreMetaData(config model.Config) {
+	countryMetadataCollection := scrapeWebsite(config)
 	storeMetaData(countryMetadataCollection)
 }
 
 //scrapes the google website and extracts the country specific metadata
 //the country metadata is stored in the map of country name and short name
-func scrapeWebsite() []model.GoogleNewslinesMetadata {
+func scrapeWebsite(config model.Config) []model.GoogleNewslinesMetadata {
+	logger := logs.InitLogger(config.Logger.LogPath)
 	var countryMetadata []model.GoogleNewslinesMetadata
 
 	// Make HTTP request
-	response, err := http.Get("https://newsapi.org/sources")
+	response, err := http.Get(config.WebsiteScraper.GoogleNewsMetadataAPI)
+	logger.Info("Retreived the web page from google")
 
 	//check for error
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	//close the resource
@@ -34,13 +36,13 @@ func scrapeWebsite() []model.GoogleNewslinesMetadata {
 	// Create a goquery document from the HTTP response
 	document, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
-		log.Fatal("Error loading HTTP response body. ", err)
+		logger.Fatal("Error loading HTTP response body. ", err)
 	}
 
 	// Copy data from the response to standard output
 	_, err = io.Copy(os.Stdout, response.Body)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	// Find country and short country name
@@ -71,6 +73,7 @@ func scrapeWebsite() []model.GoogleNewslinesMetadata {
 
 	//extract the countries from web page
 	document.Find(".countries-and-categories .sources-container .source").Each(getCountries)
+	logger.Info("Retreived and stored the metadata from the webpage")
 
 	return countryMetadata
 }

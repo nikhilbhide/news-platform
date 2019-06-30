@@ -9,6 +9,7 @@ type Config struct {
 	KafkaBrokers   string         `json:"KafkaBrokers"`
 	Version        Version        `json:"Version"`
 	WebsiteScraper WebsiteScraper `json:"WebsiteScraper"`
+	Logger         Logger         `json:"Logger"`
 }
 
 type Version struct {
@@ -19,4 +20,8 @@ type Version struct {
 
 type WebsiteScraper struct {
 	GoogleNewsMetadataAPI string `json:"GoogleNewsMetadataAPI"    envconfig:"GOOGLE_NEWS_METADATA_API"`
+}
+
+type Logger struct {
+	LogPath string `json:"LogPath"`
 }

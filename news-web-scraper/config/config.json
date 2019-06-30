@@ -21,5 +21,9 @@
     "ServiceProvider": "org.github.nik",
 
     "Number": "0.1"
+  },
+
+  "Logger": {
+    "LogPath": "/media/nik/7ec12544-2887-498c-85e9-bb82dfe7ffcc/nik/Setups/news-platform/news-platform-headlines"
   }
 }

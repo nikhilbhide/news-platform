@@ -1,0 +1,25 @@
+{
+  "Cassandra": {
+    "Host": "localhost:9042",
+    "Keyspace": "article_db"
+  },
+
+  "WebsiteScraper": {
+    "GoogleNewsMetadataAPI":"https://newsapi.org/sources"
+  },
+
+  "KafkaBrokers":  "localhost:9092",
+
+  "ListernURL": "localhost:8082",
+
+  "Version": {
+
+    "SolutionName":  "News Scraper",
+
+    "ServiceName":    "News Scraper Microservice",
+
+    "ServiceProvider": "org.github.nik",
+
+    "Number": "0.1"
+  }
+}

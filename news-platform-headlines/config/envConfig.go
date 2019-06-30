@@ -1,11 +1,11 @@
 package config
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/nik/news-platform/news-platform-headlines/model"
 	"os"
 )
-import "fmt"
-import "encoding/json"
 
 //load configuration from the config file
 func LoadConfiguration(file string) model.Config {

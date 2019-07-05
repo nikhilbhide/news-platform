@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/justinas/alice"
 	"github.com/nik/news-platform/common-platform/logger"
 	"github.com/nik/news-platform/news-web-scraper/config"
-	"github.com/nik/news-platform/news-web-scraper/handlers/metadata/google"
 	"github.com/nik/news-platform/news-web-scraper/handlers/scraper"
+	"github.com/nik/news-platform/news-web-scraper/interceptor"
+	"github.com/nik/news-platform/news-web-scraper/router"
 	"net/http"
 )
 
@@ -18,14 +20,11 @@ func main() {
 	scraper.ScrapeAndStoreMetaData(config)
 
 	//setting up web server middlewares
-	/*middlewareManager := alice.New(
-	transactionId.AddIDRequestMiddleware,transactionId.AddIDRequestMiddleware).
-	Then(router.CreateRouter())
-	*/
+	middlewareManager := alice.New(
+		transactionId.AddIDRequestMiddleware).
+		Then(router.CreateRouter())
+
 	logger.Info("http handlers are initialized")
-
-	//start listening
-	http.HandleFunc("/view/", handler.GetCountryMetadata)
-
-	http.ListenAndServe("localhost:8083", nil)
+	error := http.ListenAndServe(config.ListernURL, middlewareManager)
+	logger.Infof("Stopping the application %v", error)
 }

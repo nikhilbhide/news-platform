@@ -10,6 +10,7 @@ type Config struct {
 	Version        Version        `json:"Version"`
 	WebsiteScraper WebsiteScraper `json:"WebsiteScraper"`
 	Logger         Logger         `json:"Logger"`
+	ListernURL     string         `"json:ListernURL"`
 }
 
 type Version struct {

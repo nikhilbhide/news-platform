@@ -10,7 +10,7 @@
 
   "KafkaBrokers":  "localhost:9092",
 
-  "ListernURL": "localhost:8082",
+  "ListernURL": "localhost:8085",
 
   "Version": {
 
@@ -24,6 +24,6 @@
   },
 
   "Logger": {
-    "LogPath": "/media/nik/7ec12544-2887-498c-85e9-bb82dfe7ffcc/nik/Setups/news-platform/news-platform-headlines"
+    "LogPath": "/media/nik/7ec12544-2887-498c-85e9-bb82dfe7ffcc/nik/Setups/news-platform/news-web-scraper"
   }
 }
